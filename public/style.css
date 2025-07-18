@@ -1,17 +1,34 @@
 body {
   font-family: Arial, sans-serif;
-  max-width: 600px;
-  margin: auto;
   background: #fafafa;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px;
 }
 h1 { text-align: center; }
-#postForm { display: flex; gap: 10px; margin-bottom: 20px; }
-#posts .post {
-  background: #fff;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-  padding: 10px;
-  border-radius: 8px;
+form { margin-bottom: 20px; }
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
-.post img { width: 100%; border-radius: 8px; }
-.like-btn { color: #e1306c; cursor: pointer; }
+.media-card {
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 10px;
+  width: 300px;
+  box-sizing: border-box;
+}
+.media-card img, .media-card video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.like-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+.like-btn:active { transform: scale(1.1); }

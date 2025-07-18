@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Insta Clone</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Simple Insta UI</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Insta Clone</h1>
-  <form id="postForm" enctype="multipart/form-data">
-    <input type="file" id="media" accept="image/*,video/*" required>
-    <input type="text" id="caption" placeholder="Caption">
-    <button type="submit">Add Post</button>
+  <h1>Simple Insta UI</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="media" accept="image/*,video/*" required>
+    <button type="submit">Upload</button>
   </form>
-  <div id="posts"></div>
+  <div id="gallery"></div>
   <script src="app.js"></script>
 </body>
 </html>

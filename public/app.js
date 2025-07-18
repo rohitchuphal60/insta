@@ -1,111 +1,45 @@
-const API_URL = 'http://localhost:3000/posts';
-
-// Load posts
-function loadPosts() {
-  fetch(API_URL)
+function fetchGallery() {
+  fetch('/api/gallery')
     .then(res => res.json())
-    .then(posts => {
-      const postsDiv = document.getElementById('posts');
-      postsDiv.innerHTML = '';
-      posts.forEach(post => {
-        let mediaTag = '';
-        if (post.image_url.match(/\.(mp4|webm|ogg)$/)) {
-          mediaTag = `<video width="100%" controls src="${post.image_url}"></video>`;
+    .then(data => {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'media-card';
+        if (item.type.startsWith('image')) {
+          card.innerHTML = `<img src="/uploads/${item.filename}" alt="media">`;
         } else {
-          mediaTag = `<img src="${post.image_url}" alt="Post Image" />`;
+          card.innerHTML = `<video controls src="/uploads/${item.filename}"></video>`;
         }
-        postsDiv.innerHTML += `
-          <div class="post">
-            ${mediaTag}
-            <p>${post.caption}</p>
-            <button class="like-btn" onclick="likePost(${post.id}, this)">❤️ ${post.likes}</button>
+        card.innerHTML += `
+          <div>
+            <button class="like-btn" onclick="likeMedia(${item.id}, this)">❤️ ${item.likes}</button>
           </div>
         `;
+        gallery.appendChild(card);
       });
     });
 }
-loadPosts();
-
-// Add post
-document.getElementById('postForm').onsubmit = function(e) {
-  e.preventDefault();
-  const formData = new FormData();
-  const media = document.getElementById('media').files[0];
-  const caption = document.getElementById('caption').value;
-  formData.append('media', media);
-  formData.append('caption', caption);
-
-  fetch(API_URL, {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(() => {
-    loadPosts();
-    document.getElementById('postForm').reset();
-  });
-};
-
-// Like post
-function likePost(id, btn) {
-  fetch(`${API_URL}/${id}/like`, { method: 'POST' })
+function likeMedia(id, btn) {
+  fetch('/api/like/' + id, { method: 'POST' })
     .then(res => res.json())
     .then(data => {
-      btn.innerHTML = `❤️ ${data.likes}`;
-    });
-}const API_URL = 'http://localhost:3000/posts';
-
-// Load posts
-function loadPosts() {
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(posts => {
-      const postsDiv = document.getElementById('posts');
-      postsDiv.innerHTML = '';
-      posts.forEach(post => {
-        let mediaTag = '';
-        if (post.image_url.match(/\.(mp4|webm|ogg)$/)) {
-          mediaTag = `<video width="100%" controls src="${post.image_url}"></video>`;
-        } else {
-          mediaTag = `<img src="${post.image_url}" alt="Post Image" />`;
-        }
-        postsDiv.innerHTML += `
-          <div class="post">
-            ${mediaTag}
-            <p>${post.caption}</p>
-            <button class="like-btn" onclick="likePost(${post.id}, this)">❤️ ${post.likes}</button>
-          </div>
-        `;
-      });
+      if (data.success) btn.innerHTML = `❤️ ${data.likes}`;
     });
 }
-loadPosts();
-
-// Add post
-document.getElementById('postForm').onsubmit = function(e) {
+document.getElementById('uploadForm').onsubmit = function(e) {
   e.preventDefault();
-  const formData = new FormData();
-  const media = document.getElementById('media').files[0];
-  const caption = document.getElementById('caption').value;
-  formData.append('media', media);
-  formData.append('caption', caption);
-
-  fetch(API_URL, {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(() => {
-    loadPosts();
-    document.getElementById('postForm').reset();
-  });
-};
-
-// Like post
-function likePost(id, btn) {
-  fetch(`${API_URL}/${id}/like`, { method: 'POST' })
+  const formData = new FormData(this);
+  fetch('/api/upload', { method: 'POST', body: formData })
     .then(res => res.json())
     .then(data => {
-      btn.innerHTML = `❤️ ${data.likes}`;
+      if (data.success) {
+        fetchGallery();
+        this.reset();
+      } else {
+        alert(data.error || 'Upload failed');
+      }
     });
-}
+};
+fetchGallery();
