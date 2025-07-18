@@ -32,3 +32,22 @@ form { margin-bottom: 20px; }
   cursor: pointer;
 }
 .like-btn:active { transform: scale(1.1); }
+.comments { margin-top: 10px; font-size: 0.95em; }
+.comment-form {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+.comment-form input {
+  flex: 1;
+  padding: 5px;
+}
+.comment-form button {
+  padding: 5px 10px;
+  border: none;
+  background: #3498db;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.comment-form button:hover { background: #2980b9; }

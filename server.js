@@ -50,5 +50,22 @@ app.post('/api/like/:id', (req, res) => {
 
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname, 'public')));
+// Get comments for a media item
+app.get('/api/comments/:mediaId', (req, res) => {
+  db.query('SELECT * FROM comments WHERE media_id=? ORDER BY created_at DESC', [req.params.mediaId], (err, rows) => {
+    if (err) return res.json([]);
+    res.json(rows);
+  });
+});
+
+// Add a comment to a media item
+app.post('/api/comments/:mediaId', express.json(), (req, res) => {
+  const { text } = req.body;
+  if (!text) return res.json({ success: false, error: 'No text provided' });
+  db.query('INSERT INTO comments (media_id, text) VALUES (?, ?)', [req.params.mediaId, text], err => {
+    if (err) return res.json({ success: false, error: err.message });
+    res.json({ success: true });
+  });
+});
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
