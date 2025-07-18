@@ -3,6 +3,7 @@ const multer = require('multer');
 const mysql = require('mysql2');
 const path = require('path');
 const cors = require('cors');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -46,5 +47,8 @@ app.post('/api/like/:id', (req, res) => {
     });
   });
 });
+
+// Serve static files (frontend)
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
