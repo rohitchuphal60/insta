@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: auto;
+  background: #fafafa;
+}
+h1 { text-align: center; }
+#postForm { display: flex; gap: 10px; margin-bottom: 20px; }
+#posts .post {
+  background: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 8px;
+}
+.post img { width: 100%; border-radius: 8px; }
+.like-btn { color: #e1306c; cursor: pointer; }
