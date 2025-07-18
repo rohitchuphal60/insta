@@ -67,5 +67,30 @@ app.post('/api/comments/:mediaId', express.json(), (req, res) => {
     res.json({ success: true });
   });
 });
+// Delete a comment by its ID
+app.delete('/api/comments/:commentId', (req, res) => {
+  db.query('DELETE FROM comments WHERE id=?', [req.params.commentId], err => {
+    if (err) return res.json({ success: false });
+    res.json({ success: true });
+  });
+});
 
+// Delete a post (media) by its ID
+app.delete('/api/media/:mediaId', (req, res) => {
+  // Get filename first to delete the file from disk
+  db.query('SELECT filename FROM media WHERE id=?', [req.params.mediaId], (err, rows) => {
+    if (err || rows.length === 0) return res.json({ success: false, error: 'Not found' });
+    const filename = rows[0].filename;
+    // Delete media record
+    db.query('DELETE FROM media WHERE id=?', [req.params.mediaId], err2 => {
+      if (err2) return res.json({ success: false });
+      // Remove file from filesystem
+      const filePath = path.join(__dirname, 'uploads', filename);
+      fs.unlink(filePath, err3 => {
+        // Ignore errors if file not found
+        res.json({ success: true });
+      });
+    });
+  });
+});
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

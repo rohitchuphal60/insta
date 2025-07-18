@@ -15,6 +15,7 @@ function fetchGallery() {
         card.innerHTML += `
           <div>
             <button class="like-btn" onclick="likeMedia(${item.id}, this)">❤️ ${item.likes}</button>
+            <button class="delete-btn" onclick="deleteMedia(${item.id})">🗑️ Delete post</button>
           </div>
           <div class="comments" id="comments-${item.id}"></div>
           <form class="comment-form" data-id="${item.id}">
@@ -60,9 +61,27 @@ function fetchComments(mediaId) {
       commentsDiv.innerHTML = '<b>Comments:</b>';
       data.forEach(comment => {
         const p = document.createElement('p');
-        p.textContent = comment.text;
+        p.innerHTML = `${comment.text} <button class="delete-comment-btn" onclick="deleteComment(${comment.id}, ${mediaId})">🗑️</button>`;
         commentsDiv.appendChild(p);
       });
+    });
+}
+
+function deleteComment(commentId, mediaId) {
+  if (!confirm('Delete this comment?')) return;
+  fetch(`/api/comments/${commentId}`, { method: 'DELETE' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) fetchComments(mediaId);
+    });
+}
+
+function deleteMedia(mediaId) {
+  if (!confirm('Delete this post?')) return;
+  fetch(`/api/media/${mediaId}`, { method: 'DELETE' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) fetchGallery();
     });
 }
 

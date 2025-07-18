@@ -51,3 +51,14 @@ form { margin-bottom: 20px; }
   border-radius: 3px;
 }
 .comment-form button:hover { background: #2980b9; }
+.delete-btn, .delete-comment-btn {
+  background: none;
+  border: none;
+  color: #c0392b;
+  font-size: 1em;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.delete-btn:hover, .delete-comment-btn:hover {
+  color: #e74c3c;
+}
