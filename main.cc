@@ -1,11 +1,16 @@
 #include <drogon/drogon.h>
+using namespace drogon;
+
 int main() {
-    //Set HTTP listener address and port
-    drogon::app().addListener("0.0.0.0", 5555);
-    //Load config file
-    //drogon::app().loadConfigFile("../config.json");
-    //drogon::app().loadConfigFile("../config.yaml");
-    //Run HTTP framework,the method will block in the internal event loop
-    drogon::app().run();
+    // Define a simple route
+    app().registerHandler("/", [](const HttpRequestPtr &req,
+                                  std::function<void (const HttpResponsePtr &)> &&callback) {
+        auto resp = HttpResponse::newHttpResponse();
+        resp->setBody("<h1>Hello from Drogon!</h1>");
+        callback(resp);
+    });
+
+    // Start server on port 8080
+    app().addListener("0.0.0.0", 8080).run();
     return 0;
 }
